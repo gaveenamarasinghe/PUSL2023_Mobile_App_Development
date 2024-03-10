@@ -21,7 +21,7 @@ class _House1State extends State<House5> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Image.asset(
-              "images/h1.jpg", // Replace with your image path
+              "images/h5.jpg", // Replace with your image path
               fit: BoxFit.cover,
               height: 200.0, // Adjust the height as needed
             ),
