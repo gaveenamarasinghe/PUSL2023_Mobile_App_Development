@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'PostAdd.dart';
+import 'ViewAdd.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -53,17 +54,20 @@ class HomePage extends StatelessWidget {
                   );
                 },
                 child: Text(
-                  "Post Add", // Button text
+                  "Post Ads", // Button text
                   style: TextStyle(fontSize: 18.0), // Increase the font size if needed
                 ),
               ),
               SizedBox(height: 20.0), // Adding some space between buttons
               ElevatedButton(
                 onPressed: () {
-                  // Handle View Adds button press
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ViewAdd()),
+                  );
                 },
                 child: Text(
-                  "View Adds", // Button text
+                  "View Ads", // Button text
                   style: TextStyle(fontSize: 18.0), // Increase the font size if needed
                 ),
               ),

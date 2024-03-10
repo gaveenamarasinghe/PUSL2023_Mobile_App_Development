@@ -6,7 +6,7 @@ void main() {
 }
 
 class LoginApp extends StatelessWidget {
-  const LoginApp({super.key});
+  const LoginApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController _emailController = TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
   @override
@@ -46,9 +46,10 @@ class _LoginPageState extends State<LoginPage> {
             ),
             SizedBox(height: 20.0),
             TextFormField(
-              controller: _emailController,
+              controller: _usernameController,
               decoration: InputDecoration(
-                labelText: 'Email',
+                labelText: 'Username',
+                prefixIcon: Icon(Icons.person),
                 border: OutlineInputBorder(),
               ),
             ),
@@ -57,9 +58,10 @@ class _LoginPageState extends State<LoginPage> {
               controller: _passwordController,
               decoration: InputDecoration(
                 labelText: 'Password',
+                prefixIcon: Icon(Icons.lock),
                 border: OutlineInputBorder(),
               ),
-              obscureText: false,
+              obscureText: true,
             ),
             SizedBox(height: 20.0),
             Row(
@@ -67,10 +69,10 @@ class _LoginPageState extends State<LoginPage> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
-                      String email = _emailController.text;
+                      String username = _usernameController.text;
                       String password = _passwordController.text;
                       // Perform login authentication here
-                      print('Email: $email\nPassword: $password');
+                      print('Username: $username\nPassword: $password');
                     },
                     child: Text('Login'),
                   ),
