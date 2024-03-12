@@ -12,7 +12,7 @@ class _House1State extends State<House5> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home 5"), // Set the title as "Home 1"
+        title: Text("House for rent homagama"), // Set the title as "Home 1"
       ),
       body: Container(
         color: Colors.greenAccent, // Setting background color to green
@@ -31,8 +31,7 @@ class _House1State extends State<House5> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Text(
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                  "Pellentesque eget sapien aliquam, eleifend ipsum id, vehicula ipsum.",
+              "Nestled in a serene neighborhood, this charming house on Mahawatta Road offers tranquility and convenience. With spacious interiors and a well-maintained exterior, this property provides a comfortable living space for families. Close proximity to schools, shops, and public transport adds to the appeal of this address.",
             ),
             SizedBox(height: 24.0), // Increased space between description and price
             Text(
@@ -40,7 +39,7 @@ class _House1State extends State<House5> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Text(
-              "\$500,000",
+              " Rs 50,000/=",
             ),
             SizedBox(height: 24.0), // Increased space between price and location
             Text(
@@ -48,7 +47,7 @@ class _House1State extends State<House5> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Text(
-              "123 Main Street, City, Country",
+              "12A, Mahawatta Road, Homagama",
             ),
             SizedBox(height: 24.0), // Increased space between location and buttons
             Row(
