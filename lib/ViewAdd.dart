@@ -18,7 +18,7 @@ class _ViewAddState extends State<ViewAdd> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("View Add Page"), // Set the title
+        title: Text("View Ad Page"), // Set the title
       ),
       body: Container(
         color: Colors.greenAccent, // Set the background color
