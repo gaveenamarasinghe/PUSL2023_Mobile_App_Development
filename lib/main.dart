@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_new/register.dart';
 
@@ -15,7 +16,42 @@ class LoginApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: LoginPage(),
+      home: SplashScreen(), // Start with SplashScreen
+    );
+  }
+}
+
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Navigate to LoginPage after 2 seconds
+    Timer(Duration(seconds: 2), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.greenAccent,
+      body: Center(
+        child: Image.asset(
+          'images/house.png', // Path to your loading image asset
+          // You can adjust width, height, and fit as needed
+          width: 200,
+          height: 200,
+          fit: BoxFit.contain,
+        ),
+      ),
     );
   }
 }
@@ -36,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
         title: Text('Login Page'),
       ),
       body: Container(
-        color: Colors.greenAccent, // Green background color
+        color: Colors.greenAccent,
         padding: EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -79,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ],
             ),
-            SizedBox(height: 10.0), // Spacer
+            SizedBox(height: 10.0),
             Row(
               children: <Widget>[
                 Expanded(
@@ -88,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (BuildContext context) {
-                          return Registration(); // Navigate to the Registration widget
+                          return Registration();
                         }),
                       );
                     },
