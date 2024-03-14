@@ -45,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: Colors.greenAccent,
       body: Center(
         child: Image.asset(
-          'images/house.png', // Path to your loading image asset
+          'images/house.jpg', // Path to your loading image asset
           // You can adjust width, height, and fit as needed
           width: 200,
           height: 200,
