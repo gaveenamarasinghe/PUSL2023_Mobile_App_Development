@@ -39,7 +39,7 @@ class _House1State extends State<House2> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Text(
-              "\ Rs 40,000/=",
+              "\ Rs 25,000/=",
             ),
             SizedBox(height: 24.0), // Increased space between price and location
             Text(
