@@ -19,7 +19,12 @@ class _RegistrationState extends State<Registration> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Register Page"),
+        title: Text(
+          "Register Page",
+          style: TextStyle(color: Colors.white), // Change title color to white
+        ),
+        centerTitle: true, // Center the title
+        backgroundColor: Colors.blue, // Change app bar color to blue
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -99,7 +104,12 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Login Page"),
+        title: Text(
+          "Login Page",
+          style: TextStyle(color: Colors.white), // Change title color to white
+        ),
+        centerTitle: true, // Center the title
+        backgroundColor: Colors.blue, // Change app bar color to blue
       ),
       body: Center(
         child: ElevatedButton(
@@ -119,5 +129,6 @@ class LoginPage extends StatelessWidget {
 void main() {
   runApp(MaterialApp(
     home: LoginPage(),
+    debugShowCheckedModeBanner: false, // Remove debug banner
   ));
 }

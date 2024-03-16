@@ -44,7 +44,12 @@ class _PostAddState extends State<PostAdd> {
               Navigator.pop(context);
             },
           ),
-          title: Text('Post Add'),
+          title: Text(
+            'Post Add',
+            style: TextStyle(color: Colors.white), // Change title color to white
+          ),
+          centerTitle: true, // Center the title
+          backgroundColor: Colors.blue, // Change app bar color to blue
         ),
         body: Container(
           padding: EdgeInsets.all(20),

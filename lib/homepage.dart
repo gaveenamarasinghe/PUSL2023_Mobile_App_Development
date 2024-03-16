@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'PostAdd.dart';
-import 'ViewAdd.dart';
+import 'Postad.dart';
+import 'Viewad.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -9,7 +9,12 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Welcome to Green Lodge"),
+        title: Text(
+          "Welcome to Green Lodge",
+          style: TextStyle(color: Colors.white), // Change title color to white
+        ),
+        centerTitle: true, // Center the title
+        backgroundColor: Colors.blue, // Change app bar color to blue
         actions: [
           IconButton(
             onPressed: () {
@@ -82,5 +87,6 @@ class HomePage extends StatelessWidget {
 void main() {
   runApp(MaterialApp(
     home: HomePage(),
+    debugShowCheckedModeBanner: false, // Remove debug banner
   ));
 }

@@ -12,7 +12,12 @@ class _House1State extends State<House1> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("House for rent Homagama"), // Set the title as "Home 1"
+        title: Text(
+          "House for rent Homagama", // Set the title as "Home 1"
+          style: TextStyle(color: Colors.white), // Change title color to white
+        ),
+        centerTitle: true, // Center the title
+        backgroundColor: Colors.blue, // Change app bar color to blue
       ),
       body: Container(
         color: Colors.greenAccent, // Setting background color to green
@@ -39,7 +44,7 @@ class _House1State extends State<House1> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Text(
-              "\ Rs 20,000/=",
+              "\ Rs 20,000/=", // Removed the extra space
             ),
             SizedBox(height: 24.0), // Increased space between price and location
             Text(

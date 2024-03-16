@@ -4,15 +4,20 @@ class House3 extends StatefulWidget {
   const House3({Key? key}) : super(key: key);
 
   @override
-  State<House3> createState() => _House1State();
+  State<House3> createState() => _House3State();
 }
 
-class _House1State extends State<House3> {
+class _House3State extends State<House3> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("House for rent Pitipana"), // Set the title as "Home 1"
+        title: Text(
+          "House for rent Pitipana", // Set the title as "Home 1"
+          style: TextStyle(color: Colors.white), // Change title color to white
+        ),
+        centerTitle: true, // Center the title
+        backgroundColor: Colors.blue, // Change app bar color to blue
       ),
       body: Container(
         color: Colors.greenAccent, // Setting background color to green
