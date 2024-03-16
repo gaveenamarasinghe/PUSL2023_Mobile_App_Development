@@ -76,7 +76,7 @@ class _PostAddState extends State<PostAdd> {
                   'Option 1',
                   'Option 2',
                   'Option 3',
-                  'Option 4'
+                  'Option 4',
                 ].map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
