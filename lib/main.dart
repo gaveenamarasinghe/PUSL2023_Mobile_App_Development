@@ -77,69 +77,71 @@ class _LoginPageState extends State<LoginPage> {
         centerTitle: true, // Center the title
         backgroundColor: Colors.blue, // Change app bar color to blue
       ),
-      body: Container(
-        color: Colors.greenAccent,
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset(
-              'images/img.png', // Path to your image asset
-            ),
-            SizedBox(height: 20.0),
-            TextFormField(
-              controller: _usernameController,
-              decoration: InputDecoration(
-                labelText: 'Username',
-                prefixIcon: Icon(Icons.person),
-                border: OutlineInputBorder(),
+      body: SingleChildScrollView( // Wrap the Column with SingleChildScrollView
+        child: Container(
+          color: Colors.greenAccent,
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(
+                'images/img.png', // Path to your image asset
               ),
-            ),
-            SizedBox(height: 20.0),
-            TextFormField(
-              controller: _passwordController,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                prefixIcon: Icon(Icons.lock),
-                border: OutlineInputBorder(),
+              SizedBox(height: 85.0),
+              TextFormField(
+                controller: _usernameController,
+                decoration: InputDecoration(
+                  labelText: 'Username',
+                  prefixIcon: Icon(Icons.person),
+                  border: OutlineInputBorder(),
+                ),
               ),
-              obscureText: true,
-            ),
-            SizedBox(height: 20.0),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      String username = _usernameController.text;
-                      String password = _passwordController.text;
-                      // Perform login authentication here
-                      print('Username: $username\nPassword: $password');
-                    },
-                    child: Text('Login'),
-                  ),
+              SizedBox(height: 20.0),
+              TextFormField(
+                controller: _passwordController,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  prefixIcon: Icon(Icons.lock),
+                  border: OutlineInputBorder(),
                 ),
-              ],
-            ),
-            SizedBox(height: 10.0),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (BuildContext context) {
-                          return Registration();
-                        }),
-                      );
-                    },
-                    child: Text('Sign Up'),
+                obscureText: true,
+              ),
+              SizedBox(height: 20.0),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        String username = _usernameController.text;
+                        String password = _passwordController.text;
+                        // Perform login authentication here
+                        print('Username: $username\nPassword: $password');
+                      },
+                      child: Text('Login'),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+              SizedBox(height: 10.0),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (BuildContext context) {
+                            return Registration();
+                          }),
+                        );
+                      },
+                      child: Text('Sign Up'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

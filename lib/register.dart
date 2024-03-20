@@ -27,71 +27,71 @@ class _RegistrationState extends State<Registration> {
         backgroundColor: Colors.blue, // Change app bar color to blue
       ),
       body: Container(
-        decoration: BoxDecoration(
-          color: Colors.greenAccent, // Set the background color
-        ),
+        color: Colors.greenAccent, // Set the background color
         child: Padding(
           padding: EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Image.asset(
-                'images/signup.png', // Replace with your image path
-                height: 210, // Adjust the height as needed
-                width: 100, // Adjust the width as needed
-              ),
-              SizedBox(height: 16.0),
-              TextFormField(
-                controller: nameController,
-                decoration: InputDecoration(
-                  labelText: 'Name',
-                  prefixIcon: Icon(Icons.person),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Image.asset(
+                  'images/signup.png', // Replace with your image path
+                  height: 210, // Adjust the height as needed
+                  width: 100, // Adjust the width as needed
                 ),
-              ),
-              SizedBox(height: 16.0),
-              TextFormField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  prefixIcon: Icon(Icons.email),
+                SizedBox(height: 50.0),
+                TextFormField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    labelText: 'Name',
+                    prefixIcon: Icon(Icons.person),
+                  ),
                 ),
-              ),
-              SizedBox(height: 16.0),
-              TextFormField(
-                controller: usernameController,
-                decoration: InputDecoration(
-                  labelText: 'Username',
-                  prefixIcon: Icon(Icons.account_circle),
+                SizedBox(height: 16.0),
+                TextFormField(
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    prefixIcon: Icon(Icons.email),
+                  ),
                 ),
-              ),
-              SizedBox(height: 16.0),
-              TextFormField(
-                controller: passwordController,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  prefixIcon: Icon(Icons.lock),
+                SizedBox(height: 16.0),
+                TextFormField(
+                  controller: usernameController,
+                  decoration: InputDecoration(
+                    labelText: 'Username',
+                    prefixIcon: Icon(Icons.account_circle),
+                  ),
                 ),
-                obscureText: true,
-              ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () {
-                  // Implement your signup logic here
-                  // You can access the entered values using the controller.text
-                  String name = nameController.text;
-                  String email = emailController.text;
-                  String username = usernameController.text;
-                  String password = passwordController.text;
+                SizedBox(height: 16.0),
+                TextFormField(
+                  controller: passwordController,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    prefixIcon: Icon(Icons.lock),
+                  ),
+                  obscureText: true,
+                ),
+                SizedBox(height: 16.0),
+                ElevatedButton(
+                  onPressed: () {
+                    // Implement your signup logic here
+                    // You can access the entered values using the controller.text
+                    String name = nameController.text;
+                    String email = emailController.text;
+                    String username = usernameController.text;
+                    String password = passwordController.text;
 
-                  // Navigate to the Home page widget
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                  );
-                },
-                child: Text('Sign Up'),
-              ),
-            ],
+                    // Navigate to the Home page widget
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                    );
+                  },
+                  child: Text('Sign Up'),
+                ),
+              ],
+            ),
           ),
         ),
       ),

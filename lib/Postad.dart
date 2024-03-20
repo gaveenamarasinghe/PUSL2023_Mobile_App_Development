@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'Postad02.dart'; // Import the Postad02.dart file
 
 class PostAdd extends StatefulWidget {
   const PostAdd({Key? key}) : super(key: key);
@@ -8,24 +9,13 @@ class PostAdd extends StatefulWidget {
 }
 
 class _PostAddState extends State<PostAdd> {
-  String _selectedOption = 'Option 1';
-  int? _selectedRadio;
-
-  String _description = '';
-  String _address = '';
-  String _price = '';
-
-  List<String> _images = [
-    'images/h1.jpg',
-    'images/h2.jpg',
-    'images/h3.jpg',
-  ];
-
-  void _handleRadioValueChanged(int? value) {
-    setState(() {
-      _selectedRadio = value;
-    });
-  }
+  String _selectedOption = 'House Rentals'; // Default selected option
+  String _location = 'Colombo'; // Default location
+  int _numberOfBeds = 0; // Default number of beds
+  int _numberOfBathrooms = 0; // Default number of bathrooms
+  bool _privateEntrance = false; // Default private entrance option
+  bool _lower = false; // Default lower option
+  bool _upper = false; // Default upper option
 
   @override
   Widget build(BuildContext context) {
@@ -45,165 +35,181 @@ class _PostAddState extends State<PostAdd> {
             },
           ),
           title: Text(
-            'Post Add',
+            'Post Ad',
             style: TextStyle(color: Colors.white), // Change title color to white
           ),
           centerTitle: true, // Center the title
           backgroundColor: Colors.blue, // Change app bar color to blue
         ),
-        body: Container(
-          padding: EdgeInsets.all(20),
-          color: Colors.greenAccent,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Select the Area :',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+        backgroundColor: Colors.greenAccent, // Set background color to green
+        body: SingleChildScrollView( // Wrap with SingleChildScrollView
+          child: Center(
+            child: Container(
+              width: 600, // Set width of the square design
+              height: 600, // Set height of the square design
+              decoration: BoxDecoration(
+                color: Colors.white54, // Set background color of the square design
+                borderRadius: BorderRadius.circular(20), // Add border radius for rounded corners
               ),
-              DropdownButton<String>(
-                value: _selectedOption,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedOption = newValue!;
-                  });
-                },
-                items: <String>[
-                  'Option 1',
-                  'Option 2',
-                  'Option 3',
-                  'Option 4',
-                ].map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  );
-                }).toList(),
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Radio Buttons:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              Row(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Radio(
-                    value: 1,
-                    groupValue: _selectedRadio,
-                    onChanged: _handleRadioValueChanged,
-                  ),
                   Text(
-                    'Houses',
-                    style: TextStyle(color: Colors.black),
+                    'Select the Category:',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
-                  Radio(
-                    value: 2,
-                    groupValue: _selectedRadio,
-                    onChanged: _handleRadioValueChanged,
+                  DropdownButton<String>(
+                    value: _selectedOption,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedOption = newValue!;
+                      });
+                    },
+                    items: <String>[
+                      'House Rentals',
+                      'Apartments Rentals',
+                      'Room & Annex Rentals',
+                    ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      );
+                    }).toList(),
                   ),
-                  Text(
-                    'Apartments',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Images:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              SizedBox(
-                height: 100,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _images.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.only(right: 10),
-                      child: Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                            image: AssetImage(_images[index]),
-                            fit: BoxFit.cover,
+                  SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Icon(Icons.location_on), // Location icon
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: TextField(
+                          readOnly: true,
+                          controller: TextEditingController(text: _location),
+                          decoration: InputDecoration(
+                            hintText: 'Location',
+                            border: OutlineInputBorder(),
                           ),
                         ),
                       ),
-                    );
-                  },
-                ),
+                      SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Handle changing the location
+                          setState(() {
+                            _location = 'New Location'; // Change the location as needed
+                          });
+                        },
+                        child: Text('Change'),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'Number of Beds:',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      setState(() {
+                        _numberOfBeds = int.tryParse(value) ?? 0;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'Number of Bathrooms:',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      setState(() {
+                        _numberOfBathrooms = int.tryParse(value) ?? 0;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'Select Features (Optional):', // Changed the text to "Select Features (Optional)"
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Text('Private Entrance'),
+                      Checkbox(
+                        value: _privateEntrance,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _privateEntrance = value ?? false;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text('Lower'),
+                      Checkbox(
+                        value: _lower,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _lower = value ?? false;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text('Upper'),
+                      Checkbox(
+                        value: _upper,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _upper = value ?? false;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              Text(
-                'Description:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              TextFormField(
-                onChanged: (value) {
-                  setState(() {
-                    _description = value;
-                  });
-                },
-              ),
-              Text(
-                'Address:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              TextFormField(
-                onChanged: (value) {
-                  setState(() {
-                    _address = value;
-                  });
-                },
-              ),
-              Text(
-                'Price:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              TextFormField(
-                onChanged: (value) {
-                  setState(() {
-                    _price = value;
-                  });
-                },
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  // Add post functionality
-                },
-                child: Text('Add Post'),
-              ),
-            ],
+            ),
           ),
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            // Navigate to Postad02.dart
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Postad02()), // Assuming Postad02.dart is the destination
+            );
+          },
+          child: Icon(Icons.arrow_forward), // Icon for the button
+          backgroundColor: Colors.blue, // Background color of the button
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat, // Position of the button
       ),
     );
   }
