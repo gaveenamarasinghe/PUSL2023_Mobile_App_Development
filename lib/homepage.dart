@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'Postad.dart';
 import 'Viewad.dart';
+import 'Profile.dart';
+import 'PaymentPage.dart';
+import 'FeedbackPage.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -11,46 +14,54 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "Welcome to Green Lodge",
-          style: TextStyle(color: Colors.white), // Change title color to white
+          style: TextStyle(color: Colors.white),
         ),
-        centerTitle: true, // Center the title
-        backgroundColor: Colors.blue, // Change app bar color to blue
+        centerTitle: true,
+        backgroundColor: Colors.blue,
         actions: [
           IconButton(
             onPressed: () {
-              // Handle search action
             },
             icon: Icon(Icons.search),
           ),
           IconButton(
             onPressed: () {
-              // Handle menu action
+
             },
             icon: Icon(Icons.menu),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Profile()),
+              );
+            },
+            icon: Icon(Icons.person),
           ),
         ],
       ),
       body: Container(
-        color: Colors.greenAccent, // Set the background color
+        color: Colors.greenAccent,
         padding: EdgeInsets.all(20.0),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'images/bd.png', // Replace 'images/bd.png' with your image path
-                height: 400, // Adjust the height of the image as needed
-                width: 400, // Adjust the width of the image as needed
+                'images/home.png',
+                height: 200,
+                width: 200,
               ),
-              SizedBox(height: 20.0), // Adding some space between image and main text
+              SizedBox(height: 20.0),
               Text(
-                "Welcome to Green Lodge", // Main text
+                "Welcome to Green Lodge",
                 style: TextStyle(
-                  fontWeight: FontWeight.bold, // Bold the main text
-                  fontSize: 24.0, // Increase the font size if needed
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24.0,
                 ),
               ),
-              SizedBox(height: 20.0), // Adding some space between main text and buttons
+              SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -59,11 +70,11 @@ class HomePage extends StatelessWidget {
                   );
                 },
                 child: Text(
-                  "Post Ads", // Button text
-                  style: TextStyle(fontSize: 18.0), // Increase the font size if needed
+                  "Post Ads",
+                  style: TextStyle(fontSize: 18.0),
                 ),
               ),
-              SizedBox(height: 20.0), // Adding some space between buttons
+              SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -72,8 +83,39 @@ class HomePage extends StatelessWidget {
                   );
                 },
                 child: Text(
-                  "View Ads", // Button text
-                  style: TextStyle(fontSize: 18.0), // Increase the font size if needed
+                  "View Ads",
+                  style: TextStyle(fontSize: 18.0),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              Divider(
+                color: Colors.white,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // Pass postId parameter here
+                  String postId = 'your_post_id'; // Replace 'your_post_id' with actual postId
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => PaymentPage(postId: postId)),
+                  );
+                },
+                child: Text(
+                  "Make Payments",
+                  style: TextStyle(fontSize: 18.0),
+                ),
+              ),
+              SizedBox(height: 10.0),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FeedbackPage()),
+                  );
+                },
+                child: Text(
+                  "Feedback",
+                  style: TextStyle(fontSize: 18.0),
                 ),
               ),
             ],
@@ -87,6 +129,6 @@ class HomePage extends StatelessWidget {
 void main() {
   runApp(MaterialApp(
     home: HomePage(),
-    debugShowCheckedModeBanner: false, // Remove debug banner
+    debugShowCheckedModeBanner: false,
   ));
 }
