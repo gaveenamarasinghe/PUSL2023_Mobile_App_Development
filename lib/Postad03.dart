@@ -1,46 +1,99 @@
+import 'dart:io';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart' as Path;
+import 'LandlordBankDetailsPage.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Postad03 extends StatefulWidget {
-  const Postad03({Key? key}) : super(key: key);
+  final String postId;
+
+  const Postad03({Key? key, required this.postId}) : super(key: key);
 
   @override
   State<Postad03> createState() => _Postad03State();
 }
 
 class _Postad03State extends State<Postad03> {
+  String rent = '';
+  List<File> images = [];
+
+  Future<void> pickImages() async {
+    final List<XFile>? pickedImages =
+    await ImagePicker().pickMultiImage();
+    if (pickedImages != null) {
+      setState(() {
+        images = pickedImages.map((XFile file) => File(file.path)).toList();
+      });
+    }
+  }
+
+  Future<void> uploadImages() async {
+    List<String> imageUrls = [];
+
+    for (var imageFile in images) {
+      Reference ref = FirebaseStorage.instance.ref().child(
+          'images/${widget.postId}/${Path.basename(imageFile.path)}');
+      UploadTask uploadTask = ref.putFile(imageFile);
+      await uploadTask.whenComplete(() async {
+        String url = await ref.getDownloadURL();
+        imageUrls.add(url);
+      });
+    }
+
+    // Get a reference to the existing post in the database
+    DatabaseReference postRef =
+    FirebaseDatabase.instance.reference().child('posts').child(widget.postId);
+
+    // Update the existing post with new values
+    await postRef.update({
+      'rent': rent,
+      'images': imageUrls,
+    }).then((_) {
+      print('Post updated successfully');
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LandlordBankDetailsPage(postId: widget.postId)),
+      );
+    }).catchError((error) {
+      print('Failed to update post: $error');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'Post Ad',
-          style: TextStyle(color: Colors.white), // Set title color to white
+          style: TextStyle(color: Colors.white),
         ),
-        centerTitle: true, // Center the title
-        backgroundColor: Colors.blue, // Set app bar color to blue
+        centerTitle: true,
+        backgroundColor: Colors.blue,
       ),
-      backgroundColor: Colors.greenAccent, // Set background color of the page to green
+      backgroundColor: Colors.greenAccent,
       body: Center(
         child: Container(
-          width: 600, // Set width of the square design
-          height: 600, // Set height of the square design
+          width: 600,
+          height: 600,
           decoration: BoxDecoration(
-            color: Colors.white54, // Set background color of the square design to white
-            borderRadius: BorderRadius.circular(20), // Add border radius for rounded corners
+            color: Colors.white54,
+            borderRadius: BorderRadius.circular(20),
           ),
-          padding: EdgeInsets.all(20), // Add padding to the container
+          padding: EdgeInsets.all(20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'images/rent.png', // Path to your image asset
-                width: 100, // Adjust width of the image as needed
-                height: 100, // Adjust height of the image as needed
-                fit: BoxFit.contain, // Adjust fit property to contain
+                'images/RE.png',
+                width: 150,
+                height: 150,
+                fit: BoxFit.contain,
               ),
-              SizedBox(height: 20), // Add spacing between image and text
+              SizedBox(height: 20),
               Text(
-                'Rent', // Title for the rent section
+                'Rent',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -48,7 +101,7 @@ class _Postad03State extends State<Postad03> {
               ),
               SizedBox(height: 10),
               Text(
-                'What is the Rent of the Property?', // Description for the rent section
+                'What is the Rent of the Property?',
                 style: TextStyle(
                   fontSize: 16,
                 ),
@@ -56,20 +109,25 @@ class _Postad03State extends State<Postad03> {
               SizedBox(height: 10),
               TextFormField(
                 decoration: InputDecoration(
-                  hintText: 'Rent (per month)', // Placeholder for the rent input field
+                  hintText: 'Rent (per month)',
                   border: OutlineInputBorder(),
                 ),
+                onChanged: (value) {
+                  setState(() {
+                    rent = value;
+                  });
+                },
               ),
               SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
-                  // Add your bank details logic here
+                  pickImages();
                 },
-                child: Text('Bank Details'), // Text for the button
+                child: Text('Upload Images'),
               ),
               SizedBox(height: 20),
               Text(
-                'Add Photos (Up to 3)', // Title for the add photos section
+                'Add Photos (Up to 3)',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -77,7 +135,7 @@ class _Postad03State extends State<Postad03> {
               ),
               SizedBox(height: 10),
               Text(
-                'Upload Pictures of your Rooms Annex and Rentals', // Description for the add photos section
+                'Upload Pictures of your Rooms Annex and Rentals',
                 style: TextStyle(
                   fontSize: 16,
                 ),
@@ -85,19 +143,21 @@ class _Postad03State extends State<Postad03> {
               SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  // Placeholder icons for adding pictures
-                  Icon(Icons.add_photo_alternate, size: 50),
-                  Icon(Icons.add_photo_alternate, size: 50),
-                  Icon(Icons.add_photo_alternate, size: 50),
-                ],
+                children: images.map((File image) {
+                  return Image.file(
+                    image,
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  );
+                }).toList(),
               ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  // Add your post logic here
+                  uploadImages();
                 },
-                child: Text('Add your Post'), // Text for the button
+                child: Text('Add your Post'),
               ),
             ],
           ),

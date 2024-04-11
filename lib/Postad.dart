@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'Postad02.dart'; // Import the Postad02.dart file
+import 'package:firebase_database/firebase_database.dart';
+import 'Postad02.dart';
 
 class PostAdd extends StatefulWidget {
   const PostAdd({Key? key}) : super(key: key);
@@ -9,47 +10,70 @@ class PostAdd extends StatefulWidget {
 }
 
 class _PostAddState extends State<PostAdd> {
-  String _selectedOption = 'House Rentals'; // Default selected option
-  String _location = 'Colombo'; // Default location
-  int _numberOfBeds = 0; // Default number of beds
-  int _numberOfBathrooms = 0; // Default number of bathrooms
-  bool _privateEntrance = false; // Default private entrance option
-  bool _lower = false; // Default lower option
-  bool _upper = false; // Default upper option
+  String _selectedOption = 'House Rentals';
+  String _location = '';
+  int _numberOfBeds = 0;
+  int _numberOfBathrooms = 0;
+  bool _privateEntrance = false;
+  bool _lower = false;
+  bool _upper = false;
+
+  final DatabaseReference _database = FirebaseDatabase.instance.ref().child('posts');
+
+  void savePostToDatabase() {
+    DatabaseReference newPostRef = _database.push();
+    newPostRef.set({
+      'category': _selectedOption,
+      'location': _location,
+      'numberOfBeds': _numberOfBeds,
+      'numberOfBathrooms': _numberOfBathrooms,
+      'privateEntrance': _privateEntrance,
+      'lower': _lower,
+      'upper': _upper,
+      'isBooked': false
+    }).then((_) {
+      print('Post added to database successfully');
+      String postId = newPostRef.key ?? '';
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Postad02(postId: postId)),
+      );
+    }).catchError((error) {
+      print('Failed to add post to database: $error');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        // Handle back button press
         Navigator.pop(context);
-        return false; // Prevent default back button behavior
+        return false;
       },
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              // Handle back button press
               Navigator.pop(context);
             },
           ),
           title: Text(
             'Post Ad',
-            style: TextStyle(color: Colors.white), // Change title color to white
+            style: TextStyle(color: Colors.white),
           ),
-          centerTitle: true, // Center the title
-          backgroundColor: Colors.blue, // Change app bar color to blue
+          centerTitle: true,
+          backgroundColor: Colors.blue,
         ),
-        backgroundColor: Colors.greenAccent, // Set background color to green
-        body: SingleChildScrollView( // Wrap with SingleChildScrollView
+        backgroundColor: Colors.greenAccent,
+        body: SingleChildScrollView(
           child: Center(
             child: Container(
-              width: 600, // Set width of the square design
-              height: 600, // Set height of the square design
+              width: 600,
+              height: 600,
               decoration: BoxDecoration(
-                color: Colors.white54, // Set background color of the square design
-                borderRadius: BorderRadius.circular(20), // Add border radius for rounded corners
+                color: Colors.white54,
+                borderRadius: BorderRadius.circular(20),
               ),
               padding: EdgeInsets.all(20),
               child: Column(
@@ -85,31 +109,17 @@ class _PostAddState extends State<PostAdd> {
                     }).toList(),
                   ),
                   SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Icon(Icons.location_on), // Location icon
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: TextField(
-                          readOnly: true,
-                          controller: TextEditingController(text: _location),
-                          decoration: InputDecoration(
-                            hintText: 'Location',
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      ElevatedButton(
-                        onPressed: () {
-                          // Handle changing the location
-                          setState(() {
-                            _location = 'New Location'; // Change the location as needed
-                          });
-                        },
-                        child: Text('Change'),
-                      ),
-                    ],
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Location',
+                      hintText: 'Enter location',
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        _location = value;
+                      });
+                    },
                   ),
                   SizedBox(height: 20),
                   Text(
@@ -147,7 +157,7 @@ class _PostAddState extends State<PostAdd> {
                   ),
                   SizedBox(height: 20),
                   Text(
-                    'Select Features (Optional):', // Changed the text to "Select Features (Optional)"
+                    'Select Features (Optional):',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -200,16 +210,12 @@ class _PostAddState extends State<PostAdd> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            // Navigate to Postad02.dart
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Postad02()), // Assuming Postad02.dart is the destination
-            );
+            savePostToDatabase();
           },
-          child: Icon(Icons.arrow_forward), // Icon for the button
-          backgroundColor: Colors.blue, // Background color of the button
+          child: Icon(Icons.arrow_forward),
+          backgroundColor: Colors.blue,
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat, // Position of the button
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       ),
     );
   }

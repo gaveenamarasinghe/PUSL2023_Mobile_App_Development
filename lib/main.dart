@@ -1,23 +1,29 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_new/register.dart';
+import 'package:flutter_new/LoginPage.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 
-void main() {
-  runApp(LoginApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await FirebaseAppCheck.instance.activate();
+  runApp(const MyApp());
 }
 
-class LoginApp extends StatelessWidget {
-  const LoginApp({Key? key}) : super(key: key);
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
+        useMaterial3: true,
         primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(), // Start with SplashScreen
+      home: SplashScreen(), // Change the initial route to SplashScreen
     );
   }
 }
@@ -31,7 +37,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Navigate to LoginPage after 2 seconds
     Timer(Duration(seconds: 2), () {
       Navigator.pushReplacement(
         context,
@@ -46,102 +51,10 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: Colors.greenAccent,
       body: Center(
         child: Image.asset(
-          'images/house.png', // Path to your loading image asset
-          // You can adjust width, height, and fit as needed
-          width: 200,
-          height: 200,
+          'images/house.png',
+          width: 250,
+          height: 250,
           fit: BoxFit.contain,
-        ),
-      ),
-    );
-  }
-}
-
-class LoginPage extends StatefulWidget {
-  @override
-  _LoginPageState createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Login Page',
-          style: TextStyle(color: Colors.white), // Change title color to white
-        ),
-        centerTitle: true, // Center the title
-        backgroundColor: Colors.blue, // Change app bar color to blue
-      ),
-      body: SingleChildScrollView( // Wrap the Column with SingleChildScrollView
-        child: Container(
-          color: Colors.greenAccent,
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.asset(
-                'images/img.png', // Path to your image asset
-              ),
-              SizedBox(height: 85.0),
-              TextFormField(
-                controller: _usernameController,
-                decoration: InputDecoration(
-                  labelText: 'Username',
-                  prefixIcon: Icon(Icons.person),
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              TextFormField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  prefixIcon: Icon(Icons.lock),
-                  border: OutlineInputBorder(),
-                ),
-                obscureText: true,
-              ),
-              SizedBox(height: 20.0),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        String username = _usernameController.text;
-                        String password = _passwordController.text;
-                        // Perform login authentication here
-                        print('Username: $username\nPassword: $password');
-                      },
-                      child: Text('Login'),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 10.0),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (BuildContext context) {
-                            return Registration();
-                          }),
-                        );
-                      },
-                      child: Text('Sign Up'),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
         ),
       ),
     );
