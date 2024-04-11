@@ -1,15 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'Postad03.dart';
 
 class Postad02 extends StatefulWidget {
-  const Postad02({Key? key}) : super(key: key);
+  final String postId;
+
+  const Postad02({Key? key, required this.postId}) : super(key: key);
 
   @override
   State<Postad02> createState() => _Postad02State();
 }
 
 class _Postad02State extends State<Postad02> {
-  TextEditingController _addressController = TextEditingController(); // Controller for the address text field
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
+  TextEditingController _opAddressController = TextEditingController();
+
+  final DatabaseReference _database = FirebaseDatabase.instance.ref();
+
+  void savePostToDatabase() {
+    _database.child('posts').child(widget.postId).update({
+      'title': _titleController.text,
+      'description': _descriptionController.text,
+      'optionalAddress': _opAddressController.text,
+    }).then((_) {
+      print('Post updated in database successfully');
+    }).catchError((error) {
+      print('Failed to update post in database: $error');
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -17,20 +37,20 @@ class _Postad02State extends State<Postad02> {
       appBar: AppBar(
         title: Text(
           'Post Ad',
-          style: TextStyle(color: Colors.white), // Set title color to white
+          style: TextStyle(color: Colors.white),
         ),
-        centerTitle: true, // Center the title
-        backgroundColor: Colors.blue, // Set app bar color to blue
+        centerTitle: true,
+        backgroundColor: Colors.blue,
       ),
-      backgroundColor: Colors.greenAccent, // Set background color to green accent
-      body: SingleChildScrollView( // Wrap with SingleChildScrollView
+      backgroundColor: Colors.greenAccent,
+      body: SingleChildScrollView(
         child: Center(
           child: Container(
-            width: 600, // Set width of the square design
-            height: 600, // Set height of the square design
+            width: 600,
+            height: 600,
             decoration: BoxDecoration(
-              color: Colors.white54, // Set background color of the square design
-              borderRadius: BorderRadius.circular(20), // Add border radius for rounded corners
+              color: Colors.white54,
+              borderRadius: BorderRadius.circular(20),
             ),
             padding: EdgeInsets.all(20),
             child: Column(
@@ -53,30 +73,7 @@ class _Postad02State extends State<Postad02> {
                 ),
                 SizedBox(height: 10),
                 TextFormField(
-                  controller: _addressController,
-                  decoration: InputDecoration(
-                    hintText: 'Address',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  'Title:', // New title after the address field
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  'Your Title Must Have At Least 5 Characters:', // New form title
-                  style: TextStyle(
-                    color: Colors.black54,
-                  ),
-                ),
-                SizedBox(height: 10),
-                TextFormField(
+                  controller: _opAddressController,
                   decoration: InputDecoration(
                     hintText: 'Title',
                     border: OutlineInputBorder(),
@@ -84,7 +81,7 @@ class _Postad02State extends State<Postad02> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  'Description:', // New title for description
+                  'Title:',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -93,14 +90,39 @@ class _Postad02State extends State<Postad02> {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  'Enter your Post Description:', // New form title for description
+                  'Your Title Must Have At Least 5 Characters:',
                   style: TextStyle(
                     color: Colors.black54,
                   ),
                 ),
                 SizedBox(height: 10),
                 TextFormField(
-                  maxLines: 3, // Allowing multiple lines for description
+                  controller: _titleController,
+                  decoration: InputDecoration(
+                    hintText: 'Title',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Description:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Enter your Post Description:',
+                  style: TextStyle(
+                    color: Colors.black54,
+                  ),
+                ),
+                SizedBox(height: 10),
+                TextFormField(
+                  controller: _descriptionController,
+                  maxLines: 3,
                   decoration: InputDecoration(
                     hintText: 'Description',
                     border: OutlineInputBorder(),
@@ -113,16 +135,16 @@ class _Postad02State extends State<Postad02> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Navigate to Postad03.dart page
+          savePostToDatabase();
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Postad03()), // Ensure correct usage of Postad03 class
+            MaterialPageRoute(builder: (context) => Postad03(postId: widget.postId)),
           );
         },
-        child: Icon(Icons.arrow_forward), // Icon for the button
-        backgroundColor: Colors.blue, // Background color of the button
+        child: Icon(Icons.arrow_forward),
+        backgroundColor: Colors.blue,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat, // Position of the button
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
