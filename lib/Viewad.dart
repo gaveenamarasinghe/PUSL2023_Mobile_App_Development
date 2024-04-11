@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'house1.dart';
-import 'house2.dart';
-import 'house3.dart';
-import 'house4.dart';
-import 'house5.dart';
-import 'house6.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'package:flutter_new/addDetails.dart';
 
 class ViewAdd extends StatefulWidget {
   const ViewAdd({Key? key}) : super(key: key);
@@ -14,90 +11,90 @@ class ViewAdd extends StatefulWidget {
 }
 
 class _ViewAddState extends State<ViewAdd> {
+  late Query dbRef;
+
   @override
+  void initState() {
+    super.initState();
+    dbRef = FirebaseDatabase.instance.ref().child('posts').orderByChild('isBooked').equalTo(false);
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "View Ad Page", // Set the title
-          style: TextStyle(color: Colors.white), // Change title color to white
+          "View Ad Page",
+          style: TextStyle(color: Colors.white),
         ),
-        centerTitle: true, // Center the title
-        backgroundColor: Colors.blue, // Change app bar color to blue
+        centerTitle: true,
+        backgroundColor: Colors.blue,
       ),
-      body: Container(
-        color: Colors.greenAccent, // Set the background color
-        child: ListView(
-          padding: EdgeInsets.all(16.0),
-          children: [
-            buildCard("Image 1", "House 1", "images/h1.jpg", () {
-              Navigator.push(
+      body: Scrollbar(
+        child: Container(
+          color: Colors.greenAccent,
+          child: FirebaseAnimatedList(
+            query: dbRef,
+            defaultChild: Text(
+              'Loading... Please wait..!!',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+            ),
+            itemBuilder: (BuildContext context, DataSnapshot snapshot,
+                Animation<double> animation, int index) {
+              Map post = snapshot.value as Map;
+              post['key'] = snapshot.key;
+              return buildCard(post['title'], post['images'][0], ()
+              { Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => House1()),
-              );
-            }),
-            buildCard("Image 2", "House 2","images/h2.jpg", () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => House2()),
-              );
-            }),
-            buildCard("Image 3", "House 3","images/h3.jpg", () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => House3()),
-              );
-            }),
-            buildCard("Image 4", "House 4","images/h4.webp", () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => House4()),
-              );
-            }),
-            buildCard("Image 5", "House 5","images/h5.jpg", () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => House5()),
-              );
-            }),
-            buildCard("Image 6", "House 6","images/h6.jpg", () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => House6()),
-              );
-            }),
-          ],
+                MaterialPageRoute(builder: (context) => addDetails(postId: post['key'])),
+              );});
+            },
+          ),
         ),
       ),
     );
   }
 
-  Widget buildCard(String imageLabel, String topic, String imagePath, VoidCallback onTap) {
-    return Card(
-      elevation: 4.0,
-      margin: EdgeInsets.symmetric(vertical: 8.0),
-      child: InkWell(
-        onTap: onTap,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Image.asset(
-              imagePath,
-              fit: BoxFit.cover,
-              height: 150.0, // Adjust the height as needed
-            ),
-            SizedBox(height: 8.0),
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                topic,
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
+  Widget buildCard(String topic, String imagePath, VoidCallback onTap) {
+    return Container(
+      margin: EdgeInsets.only(top: 8.0, left: 9.0, right: 9.0),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(0.0),
+            topRight: Radius.circular(0.0),
+            bottomLeft: Radius.circular(15.0),
+            bottomRight: Radius.circular(15.0),
+          ),
+          side: BorderSide(color: Colors.black, width: 2.0),
+        ),
+        elevation: 4.0,
+        margin: EdgeInsets.symmetric(vertical: 8.0),
+        child: InkWell(
+          onTap: onTap,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Image.network(
+                imagePath,
+                fit: BoxFit.cover,
+                height: 150.0,
+              ),
+              SizedBox(height: 8.0),
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  topic,
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
