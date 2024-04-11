@@ -1,94 +1,171 @@
 import 'package:flutter/material.dart';
-import 'homepage.dart';
+import 'package:flutter_new/homepage.dart';
+import 'package:flutter_new/register.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class Registration extends StatefulWidget {
-  const Registration({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
-  State<Registration> createState() => _RegistrationState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _RegistrationState extends State<Registration> {
-  // Controller for text fields
-  TextEditingController nameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+class _LoginPageState extends State<LoginPage> {
+  bool loading = false;
+  final _formKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  final _auth = FirebaseAuth.instance;
+
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+  }
+
+  void login() {
+    setState(() {
+      loading = true;
+    });
+  }
+  // TextEditingController _usernameController = TextEditingController();
+  // TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Register Page",
-          style: TextStyle(color: Colors.white), // Change title color to white
+          'Login Page',
+          style: TextStyle(color: Colors.white),
         ),
-        centerTitle: true, // Center the title
-        backgroundColor: Colors.blue, // Change app bar color to blue
+        centerTitle: true,
+        backgroundColor: Colors.blue,
       ),
-      body: Container(
-        color: Colors.greenAccent, // Set the background color
-        child: Padding(
+      body: SingleChildScrollView(
+        child: Container(
+          color: Colors.greenAccent,
           padding: EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
                 Image.asset(
-                  'images/signup.png', // Replace with your image path
-                  height: 210, // Adjust the height as needed
-                  width: 100, // Adjust the width as needed
+                  'images/img.png',
                 ),
-                SizedBox(height: 50.0),
-                TextFormField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    labelText: 'Name',
-                    prefixIcon: Icon(Icons.person),
-                  ),
-                ),
-                SizedBox(height: 16.0),
+                SizedBox(height: 110.0),
                 TextFormField(
                   controller: emailController,
                   decoration: InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: Icon(Icons.email),
-                  ),
-                ),
-                SizedBox(height: 16.0),
-                TextFormField(
-                  controller: usernameController,
-                  decoration: InputDecoration(
                     labelText: 'Username',
-                    prefixIcon: Icon(Icons.account_circle),
+                    prefixIcon: Icon(Icons.person),
+                    border: OutlineInputBorder(),
                   ),
                 ),
-                SizedBox(height: 16.0),
+                SizedBox(height: 20.0),
                 TextFormField(
                   controller: passwordController,
                   decoration: InputDecoration(
                     labelText: 'Password',
                     prefixIcon: Icon(Icons.lock),
+                    border: OutlineInputBorder(),
                   ),
                   obscureText: true,
                 ),
-                SizedBox(height: 16.0),
-                ElevatedButton(
-                  onPressed: () {
-                    // Implement your signup logic here
-                    // You can access the entered values using the controller.text
-                    String name = nameController.text;
-                    String email = emailController.text;
-                    String username = usernameController.text;
-                    String password = passwordController.text;
+                SizedBox(height: 20.0),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: MaterialButton(
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              setState(() {
+                                loading = true;
+                              });
+                              try {
+                                final user =
+                                await _auth.signInWithEmailAndPassword(
+                                  email: emailController.text,
+                                  password: passwordController.text.toString(),
+                                );
 
-                    // Navigate to the Home page widget
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
-                  },
-                  child: Text('Sign Up'),
+                                if (emailController.text == "admin@gmail.com" &&
+                                    passwordController.text == "123456") {
+                                  // Login success
+                                  toastMessage('Login successful',
+                                      isError: false);
+
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => HomePage()),
+                                  );
+                                } else {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => HomePage()),
+                                  );
+                                  toastMessage('Login successful',
+                                      isError: false);
+                                }
+                              } catch (e) {
+                                // Login error
+                                toastMessage('Invalid email or password',
+                                    isError: true);
+                                print(e);
+                              }
+
+                              setState(() {
+                                loading = false;
+                              });
+                            }
+                          },
+                          color: Colors.deepPurple,
+                          elevation: 3,
+                          padding: const EdgeInsets.all(15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.admin_panel_settings_rounded,
+                                    color: Colors.white),
+                                SizedBox(width: 8),
+                                Text(
+                                  'LOGIN',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ])),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10.0),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (BuildContext context) {
+                              return Registration();
+                            }),
+                          );
+                        },
+                        child: Text('Sign Up'),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -99,36 +176,14 @@ class _RegistrationState extends State<Registration> {
   }
 }
 
-class LoginPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Login Page",
-          style: TextStyle(color: Colors.white), // Change title color to white
-        ),
-        centerTitle: true, // Center the title
-        backgroundColor: Colors.blue, // Change app bar color to blue
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Registration()),
-            );
-          },
-          child: Text('Go to Registration'),
-        ),
-      ),
-    );
-  }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: LoginPage(),
-    debugShowCheckedModeBanner: false, // Remove debug banner
-  ));
+void toastMessage(String message, {bool isError = false}) {
+  Fluttertoast.showToast(
+    msg: message,
+    toastLength: Toast.LENGTH_SHORT,
+    gravity: ToastGravity.BOTTOM,
+    timeInSecForIosWeb: 1,
+    backgroundColor: isError ? Colors.red : Colors.black,
+    textColor: isError ? Colors.white : Colors.white,
+    fontSize: 16.0,
+  );
 }
